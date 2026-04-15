@@ -1,0 +1,264 @@
+/* 🌿 EcoRide Unified Theme (Dark) */
+
+:root {
+  --green: #00b96f;
+  --bg: #0f1115;
+  --card-bg: #181a20;
+  --text: #f4f4f4;
+  --muted: #aaaaaa;
+  --danger: #d33;
+  --border: #262a33;
+  --radius: 10px;
+  --shadow: 0 2px 10px rgba(0,0,0,0.25);
+  --font: 'Inter', sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 850px;
+  margin: 40px auto;
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+h2, h3 {
+  color: var(--green);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+p {
+  color: var(--text);
+  line-height: 1.6;
+}
+
+button {
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.25s;
+}
+
+button:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+button.danger {
+  background: var(--danger);
+}
+
+.card {
+  background: #1e2026;
+  padding: 15px 20px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 15px;
+  border: 1px solid var(--border);
+}
+
+input, select {
+  width: 100%;
+  background: #131417;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px;
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+label {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.status-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  color: white;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+button, .card, input {
+  transition: all 0.2s ease-in-out;
+}
+button:active {
+  transform: scale(0.97);
+}
+.card:hover {
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+@media (max-width: 600px) {
+  .container {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  button {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+}
+/* 🌌 Animated EcoRide Gradient Background */
+.animated-bg {
+  background: linear-gradient(-45deg, #0f1115, #004d26, #00b96f, #00331f);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.8s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* 🌌 Low-Poly Animated Background */
+.lowpoly-bg {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(120deg, #0f1115, #00331f, #004d26, #00b96f);
+  background-size: 300% 300%;
+  animation: bgShift 20s ease infinite;
+}
+
+@keyframes bgShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Subtle polygon overlay */
+.lowpoly-bg::before,
+.lowpoly-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(60deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 60px),
+    repeating-linear-gradient(-60deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 60px);
+  background-size: 120px 120px;
+  opacity: 0.08;
+  animation: patternDrift 40s linear infinite;
+  pointer-events: none; /* ✅ Fix: allow clicks & typing */
+  z-index: 0; /* ✅ ensure it stays behind content */
+}
+
+.lowpoly-bg {
+  position: relative;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 10; /* ✅ form stays above animation */
+}
+
+
+.lowpoly-bg::after {
+  transform: rotate(180deg);
+  animation-duration: 50s;
+  opacity: 0.05;
+}
+
+@keyframes patternDrift {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    background-position: 200px 200px, -200px -200px;
+  }
+}
+
+/* Fade-in effect for the form */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.8s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+.card h4 {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  transition: 0.2s ease;
+}
+
+.card {
+  transition: 0.2s ease;
+}
+
+
+nav a:hover {
+  color: var(--green);
+}
+
+@media (max-width: 700px) {
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  nav div {
+    flex-wrap: wrap;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
