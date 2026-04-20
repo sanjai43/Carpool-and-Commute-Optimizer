@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+  <fullName>Payload__c</fullName>
+  <label>Payload (JSON)</label>
+  <type>LongTextArea</type>
+  <length>32768</length>
+  <visibleLines>10</visibleLines>
+  <description>Event details for demo/audit trail (store small JSON).</description>
+</CustomField>
+

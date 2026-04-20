@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+  <fullName>PerRiderFare__c</fullName>
+  <label>Per Rider Fare</label>
+  <type>Currency</type>
+  <precision>10</precision>
+  <scale>2</scale>
+  <formula>IF(AcceptedCount__c &gt;= 1, ROUND(SuggestedFare__c / (AcceptedCount__c + 1), 0), ROUND(SuggestedFare__c, 0))</formula>
+  <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+</CustomField>
+

@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
 import API from "../api/axios.js";
 import Navbar from "../components/Navbar.jsx";
 import useToast from "../hooks/useToast.jsx";
+import RideChatModal from "../components/RideChatModal.jsx";
+import { useSocket } from "../context/SocketContext.jsx";
+import StatusBadge from "../components/StatusBadge.jsx";
+import { formatCountdown } from "../lib/time.js";
 
 export default function MyRides() {
   const [rides, setRides] = useState([]);
   const { showToast, ToastContainer } = useToast();
+  const [chatRide, setChatRide] = useState(null);
+  const socket = useSocket();
 
   // 🟢 Fetch driver's rides
   const fetchMyRides = async () => {
@@ -43,33 +48,53 @@ export default function MyRides() {
     }
   };
 
+  const handleCancel = async (rideId) => {
+    try {
+      await API.patch(`/rides/${rideId}/cancel`, { reason: "Cancelled by driver" });
+      showToast("✅ Ride cancelled", "success");
+      fetchMyRides();
+    } catch (err) {
+      console.error("❌ Failed to cancel ride:", err);
+      showToast(err.response?.data?.message || "❌ Could not cancel ride", "error");
+    }
+  };
+
   // 🟢 Live socket updates
   useEffect(() => {
     fetchMyRides();
-
-    const url =
-      import.meta.env.VITE_SOCKET_URL ||
-      import.meta.env.VITE_API_URL.replace("/api", "");
-
-    const socket = io(url, { transports: ["websocket"] });
-    console.log("✅ Socket connected (MyRides):", url);
+    if (!socket) return;
 
     const refresh = (e) => {
       console.log(`📡 Event: ${e} → refreshing rides`);
       fetchMyRides();
     };
 
-    socket.on("ride:new", () => refresh("new"));
-    socket.on("ride:accepted", () => refresh("accepted"));
-    socket.on("ride:rejected", () => refresh("rejected"));
-    socket.on("ride:completed", () => refresh("completed"));
-    socket.on("ride:join", ({ riderName }) => {
+    const onNew = () => refresh("new");
+    const onAccepted = () => refresh("accepted");
+    const onRejected = () => refresh("rejected");
+    const onCompleted = () => refresh("completed");
+    const onCancelled = () => refresh("cancelled");
+    const onJoin = ({ riderName }) => {
       showToast(`🆕 ${riderName} requested to join your ride`, "info");
       refresh("join");
-    });
+    };
 
-    return () => socket.disconnect();
-  }, []);
+    socket.on("ride:new", onNew);
+    socket.on("ride:accepted", onAccepted);
+    socket.on("ride:rejected", onRejected);
+    socket.on("ride:completed", onCompleted);
+    socket.on("ride:cancelled", onCancelled);
+    socket.on("ride:join", onJoin);
+
+    return () => {
+      socket.off("ride:new", onNew);
+      socket.off("ride:accepted", onAccepted);
+      socket.off("ride:rejected", onRejected);
+      socket.off("ride:completed", onCompleted);
+      socket.off("ride:cancelled", onCancelled);
+      socket.off("ride:join", onJoin);
+    };
+  }, [socket]);
 
   return (
     <>
@@ -83,38 +108,52 @@ export default function MyRides() {
           rides.map((r) => (
             <div
               key={r._id}
-              style={{
-                background: "#1e2026",
-                padding: "15px",
-                marginBottom: "10px",
-                borderRadius: "8px",
-              }}
+              className="card"
             >
-              <h3 style={{ color: "#00b96f" }}>
-                {r.start} → {r.end}
-              </h3>
+              <div className="ride-head" style={{ marginBottom: 6 }}>
+                <h3 style={{ color: "#00b96f", margin: 0 }}>
+                  {r.start} → {r.end}
+                </h3>
+                <StatusBadge status={r.status} />
+              </div>
 
               {/* 🚗 Capacity & Status */}
-              <p style={{ color: "#ccc" }}>
-                Seats: {r.passengers?.length || 0}/{r.capacity || 3} •{" "}
-                {r.requests?.length || 0} Pending
-              </p>
+              <div className="ride-subline" style={{ marginBottom: 10 }}>
+                <span>
+                  Seats: <b>{r.passengers?.length || 0}/{r.capacity || 3}</b>
+                </span>
+                <span>
+                  Pending: <b>{r.requests?.length || 0}</b>
+                </span>
+              </div>
+              {r.departureTime && (
+                <p style={{ color: "#aaa", fontSize: 13, marginTop: 0 }}>
+                  {formatCountdown(r.departureTime)} • {new Date(r.departureTime).toLocaleString()} • {r.vehicleType}
+                </p>
+              )}
 
-              <p
-                style={{
-                  color:
-                    r.status === "Completed"
-                      ? "#00b96f"
-                      : r.status === "Full"
-                      ? "#ffaa00"
-                      : "#888",
-                }}
-              >
-                Status: {r.status}
-              </p>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                <button
+                  type="button"
+                  onClick={() => setChatRide(r)}
+                  style={{ background: "#1e2026", border: "1px solid #00b96f", color: "#00b96f" }}
+                >
+                  💬 Chat
+                </button>
+                {r.status !== "Completed" && r.status !== "Cancelled" && (
+                  <button
+                    type="button"
+                    className="danger"
+                    onClick={() => handleCancel(r._id)}
+                    style={{ background: "#d33" }}
+                  >
+                    Cancel Ride
+                  </button>
+                )}
+              </div>
 
               {/* ✅ Mark as Completed */}
-              {r.status !== "Completed" && (
+              {r.status !== "Completed" && r.status !== "Cancelled" && (
                 <button
                   onClick={() => handleComplete(r._id)}
                   style={{
@@ -169,7 +208,12 @@ export default function MyRides() {
                         marginBottom: "5px",
                       }}
                     >
-                      <span style={{ color: "#fff" }}>{req.name}</span>
+                      <div style={{ color: "#fff" }}>
+                        <div>{req.name}</div>
+                        {req.pickup?.label && (
+                          <div style={{ color: "#aaa", fontSize: 12 }}>Pickup: {req.pickup.label}</div>
+                        )}
+                      </div>
                       <div style={{ display: "flex", gap: "8px" }}>
                         <button
                           onClick={() =>
@@ -218,6 +262,7 @@ export default function MyRides() {
         )}
       </div>
       <ToastContainer />
+      <RideChatModal open={Boolean(chatRide)} ride={chatRide} onClose={() => setChatRide(null)} />
     </>
   );
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+  <fullName>PromoCode__c</fullName>
+  <label>Promo Code</label>
+  <type>Lookup</type>
+  <referenceTo>PromoCode__c</referenceTo>
+  <relationshipLabel>Ride Requests</relationshipLabel>
+  <relationshipName>RideRequests</relationshipName>
+  <deleteConstraint>Restrict</deleteConstraint>
+  <required>false</required>
+</CustomField>
+

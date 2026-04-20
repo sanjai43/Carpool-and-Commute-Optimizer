@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+  <fullName>ReportedUser__c</fullName>
+  <label>Reported User</label>
+  <type>Lookup</type>
+  <referenceTo>AppUser__c</referenceTo>
+  <relationshipLabel>Incidents</relationshipLabel>
+  <relationshipName>IncidentsByReported</relationshipName>
+</CustomField>
+

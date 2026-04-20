@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+  <fullName>EligibleRole__c</fullName>
+  <label>Eligible Role</label>
+  <type>Picklist</type>
+  <valueSet>
+    <valueSetDefinition>
+      <sorted>false</sorted>
+      <value><fullName>Any</fullName><default>true</default><label>Any</label></value>
+      <value><fullName>Rider</fullName><default>false</default><label>Rider</label></value>
+      <value><fullName>Driver</fullName><default>false</default><label>Driver</label></value>
+    </valueSetDefinition>
+  </valueSet>
+</CustomField>

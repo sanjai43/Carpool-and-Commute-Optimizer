@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+  <fullName>Type__c</fullName>
+  <label>Type</label>
+  <type>Picklist</type>
+  <valueSet>
+    <valueSetDefinition>
+      <sorted>false</sorted>
+      <value><fullName>SOS</fullName><default>true</default><label>SOS</label></value>
+      <value><fullName>Report</fullName><default>false</default><label>Report</label></value>
+    </valueSetDefinition>
+  </valueSet>
+</CustomField>

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api/axios";
 import Navbar from "../components/Navbar";
-import { io } from "socket.io-client";
+import { useSocket } from "../context/SocketContext.jsx";
+import Skeleton from "../components/Skeleton.jsx";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -11,39 +12,29 @@ export default function HomePage() {
     totalCO2: 0,
     totalDistance: 0,
   });
+  const [statsLoading, setStatsLoading] = useState(true);
   const [userName, setUserName] = useState("EcoRider");
-  const [socket, setSocket] = useState(null);
+  const socket = useSocket();
 
   // 🧠 Fetch function to reuse
   const refreshStats = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const { data } = await API.get("/eco", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      setStatsLoading(true);
+      const { data } = await API.get("/eco");
       setStats(data);
     } catch (err) {
       console.error("❌ Failed to load /eco:", err.response?.data || err.message);
+    } finally {
+      setStatsLoading(false);
     }
   };
 
-  // 🟢 Connect socket.io
-  useEffect(() => {
-    const url =
-      import.meta.env.VITE_SOCKET_URL ||
-      import.meta.env.VITE_API_URL.replace("/api", "");
-    const s = io(url, { transports: ["websocket"] });
-    setSocket(s);
-
-    return () => s.disconnect();
-  }, []);
-
   // 🟢 Fetch user + stats on load
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return navigate("/login", { replace: true });
+    const storedUserRaw = localStorage.getItem("user");
+    if (!storedUserRaw) return navigate("/login", { replace: true });
 
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const storedUser = JSON.parse(storedUserRaw);
     if (storedUser?.name) setUserName(storedUser.name.split(" ")[0]);
 
     refreshStats();
@@ -53,19 +44,29 @@ export default function HomePage() {
   useEffect(() => {
     if (!socket) return;
 
-    socket.on("ride:new", () => {
+    const onNew = () => {
       console.log("🔄 Ride created — refreshing stats");
       refreshStats();
-    });
+    };
 
-    socket.on("ride:joined", () => {
+    const onJoined = () => {
       console.log("🚗 Rider joined — refreshing stats");
       refreshStats();
-    });
+    };
+
+    const onDataChanged = (payload) => {
+      const kinds = payload?.kinds || [];
+      if (kinds.includes("eco")) refreshStats();
+    };
+
+    socket.on("ride:new", onNew);
+    socket.on("ride:joined", onJoined);
+    socket.on("user:dataChanged", onDataChanged);
 
     return () => {
-      socket.off("ride:new");
-      socket.off("ride:joined");
+      socket.off("ride:new", onNew);
+      socket.off("ride:joined", onJoined);
+      socket.off("user:dataChanged", onDataChanged);
     };
   }, [socket]);
 
@@ -107,7 +108,7 @@ export default function HomePage() {
             Hey, {userName}! 
           </h1>
           <p style={{ color: "#aaa", marginBottom: "30px", fontSize: "16px" }}>
-            Welcome back to <b style={{ color: "#00b96f" }}>CarShary</b> — your smarter,
+            Welcome back to <b style={{ color: "#00b96f" }}>CarpoolX</b> — your smarter,
             greener way to commute.
           </p>
 
@@ -120,17 +121,23 @@ export default function HomePage() {
             }}
           >
             <div className="card">
-              <h3 style={{ color: "#00b96f" }}>{stats.totalRides}</h3>
+              <h3 style={{ color: "#00b96f" }}>
+                {statsLoading ? <Skeleton height={28} width={70} /> : stats.totalRides}
+              </h3>
               <p style={{ color: "#aaa" }}>Rides Shared</p>
             </div>
 
             <div className="card">
-              <h3 style={{ color: "#00b96f" }}>{stats.totalDistance} km</h3>
+              <h3 style={{ color: "#00b96f" }}>
+                {statsLoading ? <Skeleton height={28} width={110} /> : `${stats.totalDistance} km`}
+              </h3>
               <p style={{ color: "#aaa" }}>Distance Covered</p>
             </div>
 
             <div className="card">
-              <h3 style={{ color: "#00b96f" }}>{stats.totalCO2} kg</h3>
+              <h3 style={{ color: "#00b96f" }}>
+                {statsLoading ? <Skeleton height={28} width={110} /> : `${stats.totalCO2} kg`}
+              </h3>
               <p style={{ color: "#aaa" }}>CO₂ Saved</p>
             </div>
           </div>
@@ -201,7 +208,7 @@ export default function HomePage() {
               paddingTop: "15px",
             }}
           >
-            Made with in India — CarShary © {new Date().getFullYear()}
+            Made with in India — CarpoolX © {new Date().getFullYear()}
           </p>
         </div>
       </div>

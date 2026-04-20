@@ -49,7 +49,8 @@ export default function LoginPage() {
 
     if (!data?.token || !data?.user) throw new Error("Invalid response");
 
-    localStorage.setItem("token", data.token);
+    // Auth token is stored as an httpOnly cookie by the backend (safer than localStorage).
+    localStorage.removeItem("token");
     localStorage.setItem("user", JSON.stringify(data.user));
     localStorage.setItem("role", data.user.role);
 
@@ -93,7 +94,7 @@ setTimeout(() => (window.location.href = next), 1000);
         }}
       >
         <h1 style={{ textAlign: "center", color: "#00b96f", marginBottom: "5px" }}>
-          CarShary
+          CarpoolX
         </h1>
         <p
           style={{

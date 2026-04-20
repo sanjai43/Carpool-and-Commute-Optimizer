@@ -31,7 +31,7 @@ export default function Dashboard() {
           borderBottom: "1px solid #262a33",
         }}
       >
-        <h2 style={{ color: "#00b96f", margin: 0 }}>🚗 EcoRide Dashboard</h2>
+        <h2 style={{ color: "#00b96f", margin: 0 }}>🚗 CarpoolX Dashboard</h2>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <span style={{ color: "#aaa", fontSize: "14px" }}>
             {user?.name} ({role})

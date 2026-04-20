@@ -5,7 +5,7 @@ body {
   color: #eee;
 }
 
-input, select, button {
+input, select, .btn {
   padding: 8px;
   border: none;
   border-radius: 4px;
@@ -13,14 +13,14 @@ input, select, button {
   font-size: 14px;
 }
 
-button {
+.btn {
   cursor: pointer;
   background-color: #00b96f;
   color: white;
   transition: 0.2s;
 }
 
-button:hover {
+.btn:hover {
   background-color: #00a062;
 }
 

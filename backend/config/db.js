@@ -1,11 +1,7 @@
-import mongoose from "mongoose";
-
+// This project runs in a "no external DB required" mode by default.
+// A production-grade MongoDB integration can be re-added later if needed.
 const connectDB = async () => {
-  const uri = process.env.MONGO_URI;
-  if (!uri) throw new Error("MONGO_URI not set");
-  mongoose.set("strictQuery", true);
-  await mongoose.connect(uri, { dbName: "ecoride" });
-  console.log("MongoDB connected");
+  console.log("DB mode: in-process memory store");
 };
 
 export default connectDB;

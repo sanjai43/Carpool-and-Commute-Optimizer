@@ -1,0 +1,119 @@
+{
+  "users": [
+    {
+      "_id": "3e0853b4-4695-4ce3-a11d-6aaa3c382d57",
+      "id": "3e0853b4-4695-4ce3-a11d-6aaa3c382d57",
+      "name": "se",
+      "email": "sdemo@gmail.com",
+      "password": "$2b$10$Z31j5T4T9UOwkB7kK8O49ODJgRA.cYguAB21fukpcoC/Pm3C7p07K",
+      "role": "Rider",
+      "createdAt": "2026-04-15T23:45:42.839Z",
+      "updatedAt": "2026-04-15T23:45:42.839Z",
+      "blockedUserIds": [],
+      "ratingSum": 0,
+      "ratingCount": 0,
+      "verified": true
+    },
+    {
+      "_id": "aef4b179-8119-477e-bb34-c1071b895929",
+      "id": "aef4b179-8119-477e-bb34-c1071b895929",
+      "name": "DEMO",
+      "email": "finaldemo@gmail.com",
+      "password": "$2b$10$JVDhyU5XPF9aRnGjpPY7MO6i5Z8A8cMedFlYmFmWMSqAMvTwR9BAK",
+      "role": "Rider",
+      "createdAt": "2026-04-15T23:56:25.670Z",
+      "updatedAt": "2026-04-15T23:56:25.670Z",
+      "blockedUserIds": [],
+      "ratingSum": 0,
+      "ratingCount": 0,
+      "verified": true
+    },
+    {
+      "_id": "e6f7178c-9526-47b9-b025-7128d7bd7fdf",
+      "id": "e6f7178c-9526-47b9-b025-7128d7bd7fdf",
+      "name": "DEMO D",
+      "email": "finaldemod@gmail.com",
+      "password": "$2b$10$GZqxWQADtyUM5WgNzkK5Mu4NR5AHjtelK3hanSVxeOEteoQOXgmke",
+      "role": "Driver",
+      "createdAt": "2026-04-16T00:18:50.228Z",
+      "updatedAt": "2026-04-16T00:18:50.228Z",
+      "blockedUserIds": [],
+      "ratingSum": 5,
+      "ratingCount": 1,
+      "verified": true
+    },
+    {
+      "_id": "4d5d6990-fa72-4b23-a7d4-aea900eac7a8",
+      "id": "4d5d6990-fa72-4b23-a7d4-aea900eac7a8",
+      "name": "Admin",
+      "email": "admin@carshary.local",
+      "password": "$2b$10$sqlAT8LcnPUPOddvvdT3KOkFX2F5QuYpkL8NYRtT86JhW8wjTsbIy",
+      "role": "Admin",
+      "createdAt": "2026-04-16T00:25:00.694Z",
+      "updatedAt": "2026-04-16T00:25:00.697Z",
+      "blockedUserIds": [],
+      "ratingSum": 0,
+      "ratingCount": 0,
+      "verified": true
+    }
+  ],
+  "rides": [
+    {
+      "_id": "74770874-9bef-49c3-be30-2c8312ad9a14",
+      "id": "74770874-9bef-49c3-be30-2c8312ad9a14",
+      "driver": "e6f7178c-9526-47b9-b025-7128d7bd7fdf",
+      "passengers": [
+        "aef4b179-8119-477e-bb34-c1071b895929"
+      ],
+      "requests": [],
+      "start": "Bharathi Park 2nd Cross Road, Saibaba Colony, Ward 22, West Zone, Coimbatore, Coimbatore North, Coimbatore, Tamil Nadu, 641001, India",
+      "end": "Civil Aerodrome, Ward 36, East Zone, Coimbatore, Coimbatore North, Coimbatore, Tamil Nadu, 641001, India",
+      "startLocation": {
+        "type": "Point",
+        "coordinates": [
+          76.94421350955965,
+          11.022714937533486
+        ]
+      },
+      "endLocation": {
+        "type": "Point",
+        "coordinates": [
+          77.03754901885988,
+          11.03654987602447
+        ]
+      },
+      "distanceKm": 11.9,
+      "co2SavedKg": 2.28,
+      "capacity": 3,
+      "status": "Completed",
+      "createdAt": "2026-04-16T00:19:54.093Z",
+      "updatedAt": "2026-04-16T04:07:46.011Z",
+      "messages": [
+        {
+          "_id": "1776311431829-6a83f2d583198",
+          "userId": "e6f7178c-9526-47b9-b025-7128d7bd7fdf",
+          "userName": "DEMO D",
+          "text": "Hi",
+          "createdAt": "2026-04-16T03:50:31.829Z"
+        },
+        {
+          "_id": "1776312180246-d3a47c5bd30d2",
+          "userId": "e6f7178c-9526-47b9-b025-7128d7bd7fdf",
+          "userName": "DEMO D",
+          "text": "Hi",
+          "createdAt": "2026-04-16T04:03:00.246Z"
+        }
+      ],
+      "reports": [],
+      "vehicleType": "PetrolCar",
+      "recurrence": {
+        "frequency": "none",
+        "days": []
+      },
+      "departureTime": null,
+      "cancelReason": null,
+      "cancelledBy": null
+    }
+  ],
+  "reports": []
+}
